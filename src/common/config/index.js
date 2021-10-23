@@ -4,6 +4,7 @@ dotenv.config();
 module.exports = {
   server: {
     port: parseInt(process.env.SERVER_PORT),
+    prefix: process.env.SERVER_PREFIX
   },
   db: {
     port: parseInt(process.env.SEQUELIZE_PORT),
@@ -13,5 +14,9 @@ module.exports = {
     user: process.env.SEQUELIZE_USER,
     password: process.env.SEQUELIZE_PASSWORD,
     database: process.env.SEQUELIZE_DATABASE
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expireTime: process.env.JWT_EXPIRE_TIME
   }
 };

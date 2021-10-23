@@ -1,4 +1,4 @@
-const User = require("../model/user");
+const User = require("../model/user.model");
 
 class UserService {
   async create({ username = "", password = "", is_admin = 0 }) {
@@ -27,6 +27,16 @@ class UserService {
 
     return userInfo ? userInfo.dataValues : null;
   }
+
+  async updateById({ id, username, password, is_admin }) {
+    const newUser = {};
+    username && Object.assign(newUser, { username });
+    password && Object.assign(newUser, { password });
+    is_admin && Object.assign(newUser, { is_admin });
+    
+    const res = await User.update(modifyBody, { where: { id } });
+    return res[0];
+  } 
 }
 
 module.exports = new UserService();

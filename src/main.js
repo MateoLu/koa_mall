@@ -1,2 +1,4 @@
 require("@babel/register")
-require("./app")
+const { executeApp } = require("./app")
+
+executeApp();
