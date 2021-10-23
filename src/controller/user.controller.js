@@ -2,6 +2,9 @@ const { Controller, Get } = require("../common/decorator/index");
 const userService = require("../service/user.service");
 const { ResponseSuccess, ResponseFail, EmitError } = require("../common/utils");
 
+/**
+ * 用户管理控制层
+ */
 @Controller("/users")
 class UserController {
   @Get()

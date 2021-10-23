@@ -52,4 +52,10 @@ module.exports = {
       }
     });
   },
+  // 统一处理错误函数
+  errorHandler(err, ctx) {
+    console.error(`【错误提示信息】==> ${err.message}`);
+    ctx.status = err.code;
+    ctx.body = err;
+  },
 };

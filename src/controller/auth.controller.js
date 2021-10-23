@@ -13,6 +13,9 @@ const {
   generateToken,
 } = require("../common/utils");
 
+/**
+ * 用户认证控制层
+ */
 @Controller("/auth")
 class AuthController {
   @Post("/regist")
