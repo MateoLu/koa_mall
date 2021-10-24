@@ -3,7 +3,6 @@ const KoaBody = require("koa-body");
 const compress = require("koa-compress");
 const KoaLogger = require("koa-logger");
 const cors = require("koa2-cors");
-const KoaJwt = require("koa-jwt");
 const KoaStatic = require('koa-static');
 const KoaParameter = require('koa-parameter');
 const path = require('path');
@@ -30,11 +29,6 @@ app.use(KoaBody({
 app.use(KoaLogger());
 app.use(KoaStatic(path.join(__dirname, '..', 'static')));
 app.use(cors());
-app.use(
-  KoaJwt({ secret: config.jwt.secret }).unless({
-    path: [/^\/api\/v1\/auth\/login/, /^\/api\/v1\/auth\/regist/, /^\/api\/v1\/goods/],
-  })
-);
 app.use(KoaParameter(app));
 
 // 初始化路由

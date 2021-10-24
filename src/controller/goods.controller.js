@@ -9,7 +9,7 @@ const {
   Get,
 } = require("../common/decorator");
 const { ResponseSuccess, EmitError, ResponseFail } = require("../common/utils");
-const { adminPermission } = require("../middlewares/auth.middleware");
+const { adminPermission, auth } = require("../middlewares/auth.middleware");
 const { verifyGoodsFormValue } = require("../middlewares/goods.middleware");
 const {
   verifyUpload,
@@ -22,16 +22,15 @@ const goodsService = require("../service/goods.service");
  */
 @Controller("/goods")
 class GoodsController {
-
   /**
    * 分页查询商品数据
-   * @param {*} ctx 
+   * @param {*} ctx
    */
   @Get()
   async findAllByPage(ctx) {
     const { pageNum = 1, pageSize = 10 } = ctx.request.query;
     const res = await goodsService.findGoodsByPagenation(pageNum, pageSize);
-    ctx.body = ResponseSuccess('商品数据查询成功', res);
+    ctx.body = ResponseSuccess("商品数据查询成功", res);
   }
 
   /**
@@ -40,7 +39,7 @@ class GoodsController {
    * @returns
    */
   @Post("/upload")
-  @Middlewares([adminPermission, verifyUpload, uploadOnlyImage])
+  @Middlewares([auth, adminPermission, verifyUpload, uploadOnlyImage])
   async uploadImage(ctx) {
     const { file } = ctx.request.files;
     const reader = fs.createReadStream(file.path); // 创建可读流
@@ -65,7 +64,7 @@ class GoodsController {
    * @param {*} ctx
    */
   @Post()
-  @Middlewares([adminPermission, verifyGoodsFormValue])
+  @Middlewares([auth, adminPermission, verifyGoodsFormValue])
   async create(ctx) {
     try {
       const { createdAt, updatedAt, ...res } = await goodsService.createGoods(
@@ -81,7 +80,7 @@ class GoodsController {
    * 修改商品
    */
   @Put("/:id")
-  @Middlewares([adminPermission, verifyGoodsFormValue])
+  @Middlewares([auth, adminPermission, verifyGoodsFormValue])
   async update(ctx) {
     try {
       const id = ctx.params.id;
@@ -99,10 +98,10 @@ class GoodsController {
 
   /**
    * 删除商品
-   * @param {*} ctx 
+   * @param {*} ctx
    */
   @Delete("/:id")
-  @Middlewares([adminPermission])
+  @Middlewares([auth, adminPermission])
   async destory(ctx) {
     try {
       const res = await goodsService.removeGoods(ctx.params.id);
@@ -119,8 +118,8 @@ class GoodsController {
   /**
    * 下架商品
    */
-  @Post('/:id/off')
-  @Middlewares([adminPermission])
+  @Post("/:id/off")
+  @Middlewares([auth, adminPermission])
   async offGoods(ctx) {
     try {
       const res = await goodsService.offGoods(ctx.params.id);
@@ -137,9 +136,9 @@ class GoodsController {
   /**
    * 上架商品
    */
-   @Post('/:id/on')
-   @Middlewares([adminPermission])
-   async onGoods(ctx) {
+  @Post("/:id/on")
+  @Middlewares([auth, adminPermission])
+  async onGoods(ctx) {
     try {
       const res = await goodsService.restoreGoods(ctx.params.id);
       if (res) {
@@ -150,7 +149,7 @@ class GoodsController {
     } catch (error) {
       EmitError(ResponseFail(500, "商品上架出现异常"), ctx);
     }
-   }
+  }
 }
 
 module.exports = GoodsController;

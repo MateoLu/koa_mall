@@ -1,6 +1,7 @@
 const { Controller, Get, Middlewares } = require("../common/decorator/index");
 const userService = require("../service/user.service");
 const { ResponseSuccess, ResponseFail, EmitError } = require("../common/utils");
+const { auth } = require('../middlewares/auth.middleware');
 
 /**
  * 用户管理控制层
@@ -8,6 +9,7 @@ const { ResponseSuccess, ResponseFail, EmitError } = require("../common/utils");
 @Controller("/users")
 class UserController {
   @Get()
+  @Middlewares([auth])
   async findAll(ctx) {
     try {
       const users = await userService.findAll();
