@@ -1,4 +1,4 @@
-const { Controller, Get } = require("../common/decorator/index");
+const { Controller, Get, Middlewares } = require("../common/decorator/index");
 const userService = require("../service/user.service");
 const { ResponseSuccess, ResponseFail, EmitError } = require("../common/utils");
 
@@ -13,7 +13,7 @@ class UserController {
       const users = await userService.findAll();
       ctx.body = ResponseSuccess("查询成功", users);
     } catch (error) {
-      EmitError(ResponseFail(400, '查询出现错误'), ctx)
+      EmitError(ResponseFail(400, "查询出现错误"), ctx);
     }
   }
 }

@@ -1,5 +1,5 @@
-const { DataTypes, UUIDV4 } = require('sequelize');
-const { sequelize } = require('../db/sequelize')
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../db/sequelize');
 
 const User = sequelize.define('users', {
   // 在这里定义模型属性
@@ -20,7 +20,8 @@ const User = sequelize.define('users', {
     defaultValue: 0,
     comment: '是否为管理员，0:不是管理员（默认），1:是管理员'
   }
- 
 });
+
+// Goods.sync({ force: true });
 
 module.exports = User;

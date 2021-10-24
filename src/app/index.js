@@ -5,6 +5,7 @@ const KoaLogger = require("koa-logger");
 const cors = require("koa2-cors");
 const KoaJwt = require("koa-jwt");
 const KoaStatic = require('koa-static');
+const KoaParameter = require('koa-parameter');
 const path = require('path');
 const config = require("../common/config");
 const initRoutes = require("../router");
@@ -19,13 +20,11 @@ connectDB();
 
 // Custom 401 handling (first middleware)
 app.use(unAuthHandler);
-
 app.use(compress());
 app.use(KoaBody({
   multipart: true,
   formidable: {
     keepExtensions: true,
-    uploadDir: path.join(__dirname, '..', 'static', 'upload')
   }
 }));
 app.use(KoaLogger());
@@ -33,10 +32,10 @@ app.use(KoaStatic(path.join(__dirname, '..', 'static')));
 app.use(cors());
 app.use(
   KoaJwt({ secret: config.jwt.secret }).unless({
-    path: [/^\/api\/v1\/auth\/login/, /^\/api\/v1\/auth\/regist/],
+    path: [/^\/api\/v1\/auth\/login/, /^\/api\/v1\/auth\/regist/, /^\/api\/v1\/goods/],
   })
 );
-
+app.use(KoaParameter(app));
 
 // 初始化路由
 initRoutes({app, globalPrefix: GLOBAL_PREFIX});
