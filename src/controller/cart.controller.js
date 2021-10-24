@@ -1,11 +1,21 @@
 const { Controller, Post, Middlewares, Get } = require("../common/decorator");
 const { ResponseSuccess, EmitError, ResponseFail } = require("../common/utils");
 const { auth } = require("../middlewares/auth.middleware");
-const { valideCartFormValue, verifyGoodsId } = require("../middlewares/cart.middleware");
+const {
+  valideCartFormValue,
+  verifyGoodsId,
+} = require("../middlewares/cart.middleware");
 const cartService = require("../service/cart.service");
 
+/**
+ * 购物车控制层
+ */
 @Controller("/carts")
 class CartController {
+  /**
+   * 添加商品到购物车
+   * @param {*} ctx
+   */
   @Post()
   @Middlewares([auth, valideCartFormValue, verifyGoodsId])
   async add(ctx) {
@@ -21,17 +31,20 @@ class CartController {
     }
   }
 
+  /**
+   * 根据当前登陆的用户查询购物车数据
+   * @param {*} ctx
+   */
   @Get()
-  @Middlewares([ auth ])
+  @Middlewares([auth])
   async findByUser(ctx) {
     try {
       const { pageNum = 1, pageSize = 10 } = ctx.request.query;
       const userId = ctx.state.user.id;
       const res = await cartService.findByUserId(userId, pageNum, pageSize);
-      ctx.body = ResponseSuccess('查询成功', res);
+      ctx.body = ResponseSuccess("查询成功", res);
     } catch (error) {
       EmitError(ResponseFail(500, "查询出现异常"), ctx);
-      
     }
   }
 }
