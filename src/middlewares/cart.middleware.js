@@ -6,11 +6,9 @@ const GoodsModel = require("../model/goods.model");
  * @param {*} ctx
  * @param {*} next
  */
-const valideCartFormValue = async (ctx, next) => {
+const valideCartFormValue = (rules) => async (ctx, next) => {
   try {
-    ctx.verifyParams({
-      goods_id: "number",
-    });
+    ctx.verifyParams(rules);
 
     await next();
   } catch (error) {

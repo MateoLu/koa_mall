@@ -24,7 +24,8 @@ app.use(KoaBody({
   multipart: true,
   formidable: {
     keepExtensions: true,
-  }
+  },
+  parsedMethods: ['POST', 'PUT', 'PATCH', 'DELETE']
 }));
 app.use(KoaLogger());
 app.use(KoaStatic(path.join(__dirname, '..', 'static')));
