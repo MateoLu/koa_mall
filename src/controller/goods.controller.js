@@ -9,12 +9,13 @@ const {
   Get,
 } = require("../common/decorator");
 const { ResponseSuccess, EmitError, ResponseFail } = require("../common/utils");
-const { adminPermission, auth } = require("../middlewares/auth.middleware");
-const { verifyGoodsFormValue } = require("../middlewares/goods.middleware");
 const {
+  adminPermission,
+  auth,
   verifyUpload,
   uploadOnlyImage,
-} = require("../middlewares/upload.middleware");
+  validator,
+} = require("../middlewares");
 const goodsService = require("../service/goods.service");
 
 /**
@@ -64,7 +65,16 @@ class GoodsController {
    * @param {*} ctx
    */
   @Post()
-  @Middlewares([auth, adminPermission, verifyGoodsFormValue])
+  @Middlewares([
+    auth,
+    adminPermission,
+    validator({
+      goodsName: { type: "string", required: true },
+      goodsPrice: { type: "number", required: true },
+      goodsNum: { type: "number", required: true },
+      goodsImg: { type: "string", required: true },
+    }),
+  ])
   async create(ctx) {
     try {
       const { createdAt, updatedAt, ...res } = await goodsService.createGoods(
@@ -80,7 +90,16 @@ class GoodsController {
    * 修改商品
    */
   @Put("/:id")
-  @Middlewares([auth, adminPermission, verifyGoodsFormValue])
+  @Middlewares([
+    auth,
+    adminPermission,
+    validator({
+      goodsName: { type: "string", required: true },
+      goodsPrice: { type: "number", required: true },
+      goodsNum: { type: "number", required: true },
+      goodsImg: { type: "string", required: true },
+    }),
+  ])
   async update(ctx) {
     try {
       const id = ctx.params.id;

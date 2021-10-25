@@ -1,7 +1,7 @@
 const { Controller, Get, Middlewares } = require("../common/decorator/index");
 const userService = require("../service/user.service");
 const { ResponseSuccess, ResponseFail, EmitError } = require("../common/utils");
-const { auth } = require('../middlewares/auth.middleware');
+const { auth } = require("../middlewares");
 
 /**
  * 用户管理控制层

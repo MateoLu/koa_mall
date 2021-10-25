@@ -7,11 +7,7 @@ const {
   Delete,
 } = require("../common/decorator");
 const { ResponseSuccess, EmitError, ResponseFail } = require("../common/utils");
-const { auth } = require("../middlewares/auth.middleware");
-const {
-  valideCartFormValue,
-  verifyGoodsId,
-} = require("../middlewares/cart.middleware");
+const { auth, verifyGoodsId, validator } = require("../middlewares");
 const cartService = require("../service/cart.service");
 
 /**
@@ -26,7 +22,7 @@ class CartController {
   @Post()
   @Middlewares([
     auth,
-    valideCartFormValue({
+    validator({
       goods_id: "number",
     }),
     verifyGoodsId,
@@ -66,7 +62,7 @@ class CartController {
    */
   @Patch("/:id")
   @Middlewares([
-    valideCartFormValue({
+    validator({
       number: { type: "number", required: false },
       selected: { type: "bool", required: false },
     }),
@@ -96,10 +92,7 @@ class CartController {
    * @returns
    */
   @Delete()
-  @Middlewares([
-    auth,
-    valideCartFormValue({ ids: { type: "array", required: true } }),
-  ])
+  @Middlewares([auth, validator({ ids: { type: "array", required: true } })])
   async removeCart(ctx) {
     try {
       const { ids } = ctx.request.body;

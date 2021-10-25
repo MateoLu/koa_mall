@@ -4,7 +4,7 @@ const {
   verifyUser,
   cryptPassword,
   verifyLogin,
-} = require("../middlewares/user.middleware");
+} = require("../middlewares");
 const userService = require("../service/user.service");
 const {
   ResponseSuccess,
